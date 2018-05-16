@@ -1,0 +1,6 @@
+<h2>this is the edit page</h2>
+<form class="post-form" method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit" class="save btn btn-default">Save</button>
+</form>

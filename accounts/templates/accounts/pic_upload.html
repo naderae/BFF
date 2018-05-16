@@ -1,0 +1,9 @@
+<form action="{% url 'accounts:upload_pics' user.id %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <table>
+      <tr>
+        <td>Select Pictures: </td><td><input name="files" type="file" size="50" accept="image/*" multiple>  </td>
+        <td><button type="submit"> Upload </button> </td>
+       </tr>
+    </table>
+</form>

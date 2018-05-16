@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+{% load staticfiles %}
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'groups/groups .css' %}" />
+    <script src="{% static 'groups/js/groups.js' %}"></script>
+  </head>
+  <body>
+
+    <div class="container">
+
+      <div class="row">
+
+        <div class="col-2">
+          <img src="{{group.image.url}}" alt="" height="150" width="150">
+          <h4>{{group.name}}</h4><br>
+
+          <div class="col-md-14  container-widget">
+              <div class="panel panel-info panel-widget">
+                  <div class="panel-title text-center">
+                    Group Members
+                  </div>
+                  {% if group.members.all.count > 0 %}
+                    <div class="panel-body">
+                      {% for member in group.members.all %}
+                        <div class="basic-list image-list">
+                          <li style="list-style-type: none;"><a href="{% url 'accounts:profile' member.id %}" >{{member.username}}</a></li>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  {% else %}
+                    <h3>This Group has no members yet</h3>
+                  {% endif %}
+              </div>
+          </div>
+
+
+        </div>
+        <div class="col-8">
+          <div class="jumbotron">
+            <p>{{group.description}}</p>
+          </div>
+        </div>
+
+
+
+        {% if user in group.members.all %}
+        <div class="col-2">
+          <a href="javascript:{document.getElementById('leave').submit()}"><button class="btn btn-danger btn-lg btn-block"> Leave ({{group.members.count}})</button></a>
+        </div>
+        {% else %}
+          <div class="col-2">
+            <a href="javascript:{document.getElementById('join').submit()}"><button class="btn btn-success btn-lg btn-block"> Join {{group.members.count}}</button></a>
+          </div>
+        {% endif %}
+
+      </div>
+
+
+
+      {% if user in group.members.all %}
+
+      <div class="row">
+
+
+        <div class="col-md-2">
+
+
+
+          <h3 style="color:green;">Leave A Post</h3>
+
+          <form action="{% url 'posts:create' group.id %}" method="post" style="width:800px;">
+            {% csrf_token %}
+              <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                      <label for="title">Title</label>
+                      <input id="title" type="text" name="title" placeholder="title" required="required" data-error="Firstname is required.">
+                      <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+              </div>
+              <div class="row">
+                 <div class="col-md-6">
+                     <div class="form-group">
+                         <label for="form_message">Post *</label>
+                         <textarea id="form_message" name="body" class="form-control" placeholder="Message for me *" rows="4" required="required" data-error="Please,leave us a message."></textarea>
+                         <div class="help-block with-errors"></div>
+                     </div>
+                 </div>
+                 <div class="col-md-12">
+                        <input type="submit" class="btn btn-success btn-send" value="Send message">
+                  </div>
+              </div>
+
+          </form>
+          <br>
+
+        {%endif%}
+    </div>
+  </div>
+
+  {% for single_post in posts %}
+    <div class="container">
+        <div class="row">
+            <div class="[ col-xs-12 col-sm-offset-1 col-sm-5 ]" style="margin:0 auto;">
+                <div class="[ panel panel-default ] panel-google-plus">
+                    <div class="panel-heading">
+                        <img class="[ img-circle pull-left ]" src="https://lh3.googleusercontent.com/-CxXg7_7ylq4/AAAAAAAAAAI/AAAAAAAAAQ8/LhCIKQC5Aq4/s46-c-k-no/photo.jpg" alt="Mouse0270" />
+                        <h3>{{single_post.author}}</h3>
+                        <h5><span>Shared publicly</span> - <span>{{single_post.pub_date_pretty}}</span> </h5>
+                    </div>
+                    <div class="panel-body">
+                        <b>{{single_post.title}} || {{single_post.id}}</b><br>
+                        {{single_post.body}}
+                    </div>
+                    <div class="panel-footer">
+
+
+                        <a href="{% url 'posts:edit' group.id single_post.id %}"><span class="glyphicon glyphicon-edit"></span></a>
+                        <a class="confirm_delete" href="{% url 'posts:delete' group.id single_post.id %}"><span class="glyphicon glyphicon-trash"></span></a>
+                        {# <button type="button" name="button"><a href="{% url 'comments:create' group.id single_post.id %}">Comment</a></button> #}
+
+                        <br>
+
+                    </div>
+
+                    {# <a href="javascript:{document.getElementById('').submit()}"><button class="[ btn btn-default ]"> Like ({{single_post.likes_total}})</button></a> #}
+
+                    <form method ='POST' action="{% url 'posts:like' group.id single_post.id %}" >
+                      {% csrf_token %}
+                      <input type="submit" value='like({{single_post.likes_total}})'>
+                    </form>
+
+
+                    {# {% include "comments/comment_form.html" %} #}
+                    {% if error %}
+                      <h3>{{error}}</h3>
+                    {% endif %}
+
+                    <form  action="{% url 'comments:create' group.id single_post.id  %}" method="post">
+                      {% csrf_token %}
+
+                      <input type="text" name="body" placeholder="write comment..." >
+                      <br>
+                      <br>
+                      <input type="submit" value="Leave Comment">
+                    </form>
+
+
+
+                    {% for comment in single_post.comment_set.all %}
+                      <div class="row" >
+                        <div class="col-sm-5" >
+                          <div class="panel panel-default" style="width:31.7em;margin-bottom:0;">
+                            <div class="panel-heading">
+                              <strong> <a href="#">{{comment.author}}</a> </strong> <span class="text-muted">made on {{comment.pub_date_pretty}}</span>
+                            </div>
+                            <div class="panel-body">
+                              {{comment.body}}<br>
+                               <a href="{% url 'comments:delete' group.id single_post.id comment.id %}">Delete</a>
+                            </div><!-- /panel-body -->
+                          </div><!-- /panel panel-default -->
+                        </div><!-- /col-sm-5 -->
+                      </div><!-- /row -->
+                    {%endfor%}
+
+                  </div>
+            </div>
+          </div>
+        </div>
+  {% endfor %}
+
+
+      <form method ='POST' id= 'leave' action="{% url 'groups:leave' group.id %}" >
+        {% csrf_token %}
+        <input type="hidden" >
+      </form>
+
+
+      <form method ='POST' id= 'join' action="{% url 'groups:join' group.id %}" >
+        {% csrf_token %}
+        <input type="hidden" >
+      </form>
+
+
+
+
+
+    {% endblock %}
+
+  </body>
+</html>

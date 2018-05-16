@@ -1,0 +1,46 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="container">
+  <div class="row">
+
+
+  <div class="col-md-8">
+    <div class="list-group">
+
+      {% for group in groups.all %}
+
+      <a href="{% url 'groups:detail' group.id %}" class="list-group-item list-group-item-action flex-column align-items-start ">
+        <div class="d-flex w-100 justify-content-between">
+          <h5 class="mb-1">{{group.name}}</h5>
+          <small>members({{group.members.count}})</small>
+        </div>
+        <div class="group_description">
+          <p>{{group.description|truncatewords:20 }}</p>
+        </div>
+
+        <img src="{{group.image.url}}" width=50 height=50 >
+
+
+      </a>
+
+
+      {% endfor %}
+    </div>
+  </div>
+    
+  </div>
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}

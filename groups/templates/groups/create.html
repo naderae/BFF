@@ -1,0 +1,27 @@
+
+
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if error %}
+  <h3>{{error}}</h3>
+{% endif %}
+
+<form  action="{% url 'groups:create' %}" method="post" enctype="multipart/form-data" >
+  {% csrf_token %}
+  Group Name: <input type="text" name="name" >
+  <br>
+  <br>
+  Description: <input type="textbox" name="description" >
+  <br>
+  <br>
+  Group Image: <input type="file" name="image" >
+  <br>
+  <br>
+  <input type="submit" value="Create Group">
+</form>
+
+
+
+{% endblock %}
