@@ -116,13 +116,26 @@
           <div class="all_users">
             <ul class="list-group list-group-flush">
               {% for single_user in all_users %}
-                <li class="list-group-item"><a href="{% url 'accounts:profile' single_user.id %}">{{single_user.username}}</a></li>
+                <li class="list-group-item"><a href="{% url 'accounts:profile' single_user.id %}">{{single_user.username}}||{{single_user.id}}</a></li>
               {% endfor %}
             </ul>
           </div>
           <p><a class="btn btn-default" href="#" role="button">View details &raquo;</a></p>
         </div>
 
+        <div class="col-md-4">
+          <h2>My Locations</h2>
+          <div class="user_locations">
+
+              {% for location in locations %}
+                <a href="{% url 'locations:edit' user_profile.id location.id%}">{{location.city}}</a> <br>
+                {# {{location.position}} #}
+                {# <li class="list-group-item"><a href="{% url 'accounts:profile' single_user.id %}">{{single_user.username}}||{{single_user.id}}</a></li> #}
+              {% endfor %}
+
+          </div>
+          <p><a class="btn btn-default" href="{% url 'locations:create' user_profile.id %}" role="button">Add Location &raquo;</a></p>
+        </div>
 
 
 

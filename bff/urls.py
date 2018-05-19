@@ -29,5 +29,6 @@ urlpatterns = [
     path('posts/', include('posts.urls')),
     path('comments/', include('comments.urls')),
     path('friends/', include('friends.urls')),
+    path('locations/', include('locations.urls')),
     url(r'^messages/', include('postman.urls',namespace='postman')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

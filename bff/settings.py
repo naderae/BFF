@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'location_field.apps.DefaultConfig',
     'locations.apps.LocationsConfig',
     'friends.apps.FriendsConfig',
     'comments.apps.CommentsConfig',
@@ -44,8 +45,21 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'postman',
+    'geoposition',
 ]
 
+
+GEOPOSITION_GOOGLE_MAPS_API_KEY = 'AIzaSyBjKBbL4bh5isxKkAT596g7yHy_ROt_Bro'
+
+GEOPOSITION_MAP_OPTIONS = {
+    'minZoom': 3,
+    'maxZoom': 15,
+}
+
+GEOPOSITION_MARKER_OPTIONS = {
+    'cursor': 'move'
+}
+GEOS_LIBRARY_PATH = '/usr/local/Cellar/geos/3.6.2/lib/libgeos_c.dylib'
 POSTMAN_NOTIFIER_APP = 'notification'
 POSTMAN_AUTO_MODERATE_AS = True
 

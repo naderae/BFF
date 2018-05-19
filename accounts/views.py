@@ -5,6 +5,7 @@ from groups.models import Group
 from posts.models import Post
 from friends.models import Friend
 from accounts.models import File
+from locations.models import Location
 # from .forms import FileForm
 from django.forms import modelformset_factory
 
@@ -58,6 +59,7 @@ def profile(request, user_id):
     posts = Post.objects.filter(author=user_profile)
     pics = File.objects.filter(user=user_profile)[:6]
     all_users = User.objects.all()
+    user_locations = Location.objects.filter(user=user_profile)
     # get grabs one instance, so you grab an instance of friend.
     # you locate the friends list by its owner, which is 'current_user' in this case
     try:
@@ -66,7 +68,7 @@ def profile(request, user_id):
     except Friend.DoesNotExist:
         # friend = None
         friends = None
-    return render(request, 'accounts/profile.html', {'user_profile':user_profile, 'groups':groups, 'posts':posts, 'friends':friends, 'pics':pics, 'all_users':all_users, 'current_user':current_user})
+    return render(request, 'accounts/profile.html', {'user_profile':user_profile, 'groups':groups, 'posts':posts, 'friends':friends, 'pics':pics, 'all_users':all_users, 'current_user':current_user, 'locations':user_locations})
 
 
 
